@@ -1,7 +1,6 @@
 <?php 
     include './services/Servicios.php';
     $funcionalidad = new Servicios();
-    
     $cod_modulo = "";
     $estado="";
     $url_principal="";
@@ -16,11 +15,11 @@
     }
     else if(isset($_POST["accionInfraestructura"]) && ($_POST["accionInfraestructura"]=="Modificar"))
     {
-        $funcionalidad->modificarModulo($_POST['cod_modulo'],$_POST['nombre'],$_POST['estado'],$_POST['cod_modulo_comparar']);
+        $funcionalidad->modificarFuncionalidad($_POST['cod_funcionalidad'],$_POST['url_principal'],$_POST['nombre'],$_POST['descripcion']);
     }
     else if(isset($_GET["update"]))
     {
-        $result = $funcionalidad->encontrarModulo($_GET['update']);
+        $result = $funcionalidad->encontrarFuncionalidad($_GET['update'],$_GET['modulo']);
         if($result!=null)
         {
             $url_principal = $result['URL_PRINCIPAL'];
@@ -31,7 +30,7 @@
     }
     else if(isset($_GET['delete']))
     {
-        $funcionalidad->eliminarLogicoModulo($_GET['delete']);
+        $funcionalidad->eliminarFuncionalidad($_GET['delete']);
     }
 ?>
 
@@ -69,12 +68,13 @@
                     </select><br>
                     <input type="submit" name="cod_modulo" value="Aceptar" class="btn btn-primary">
                 </form>
+                <script type="text/javascript">
+                        document.getElementById('selectmodulo').value = "<?php echo $_GET["modulo"] ?>";
+                </script>
+                
                 <?php
                     $nombre_modulo=$_GET["modulo"];
                 ?>
-                <script type="text/javascript">
-                    document.getElementById('selectmodulo').value = "<?php echo $nombre_modulo ?>";
-                </script>
             <form action="Funcionalidades.php" name="forma" method="post" id="forma">
                 <input type="hidden" name="nombre_modulo" value="<?php echo $nombre_modulo ?>">
             </div><br><br><br>
@@ -97,6 +97,7 @@
                                     while($row = $result->fetch_assoc()) 
                                     { 
                             ?>
+                            <input type="hidden" name="cod_funcionalidad" value="<?php echo $row ["COD_FUNCIONALIDAD"];?>">
                             <input type="hidden" name="cod_modulo" value="<?php echo $row ["COD_MODULO"];?>">
                             <tr>
                                 <td><?php echo $row ["NOMBRE"];?></td>
@@ -105,8 +106,8 @@
                                 <td>
                                     <div class="text-center">
                                         <div class="btn-group">
-                                            <a href="Funcionalidades.php?update=<?php echo $row ["COD_FUNCIONALIDAD"];?>#editar" type="button" class="btn btn-primary">Editar</a>
-                                            <a href="Funcionalidades.php?delete=<?php echo $row ["COD_FUNCIONALIDAD"];?>" type="button" class="btn btn-danger">Eliminar</a>   
+                                            <a href="Funcionalidades.php?update=<?php echo $row ["COD_FUNCIONALIDAD"];?>&modulo=<?php echo $row ["COD_MODULO"];?>" type="button" class="btn btn-primary">Editar</a>
+                                            <a href="Funcionalidades.php?delete=<?php echo $row ["COD_FUNCIONALIDAD"];?>&modulo=<?php echo $row ["COD_MODULO"];?>" type="button" class="btn btn-danger">Eliminar</a>   
                                         </div>
                                     </div>
                                 </td>

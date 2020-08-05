@@ -58,9 +58,9 @@ class Servicios extends MainService
         $stmt->execute();
         $stmt->close();
     }
-    function encontrarFuncionalidad($cod_funcionalidad)
+    function encontrarFuncionalidad($cod_funcionalidad,$cod_modulo)
     {
-        $result = $this->conexion->query("SELECT * FROM seg_funcionalidad WHERE COD_FUNCIONALIDAD='".$cod_funcionalidad."'");
+        $result = $this->conexion->query("SELECT * FROM seg_funcionalidad WHERE COD_FUNCIONALIDAD='".$cod_funcionalidad."' AND COD_MODULO='".$cod_modulo."'");
         if($result->num_rows>0)
         {
             return $result->fetch_assoc();
@@ -69,6 +69,21 @@ class Servicios extends MainService
         {
             return null;
         }
+    }
+    function modificarFuncionalidad($cod_funcionalidad,$url,$nombre,$descripcion)
+    {
+        $stmt = $this->conexion->prepare("UPDATE seg_funcionalidad SET URL_PRINCIPAL=?,NOMBRE=?,DESCRIPCION=?
+                                          WHERE COD_FUNCIONALIDAD=?");
+        $stmt->bind_param('ssss' ,$url, $nombre, $descripcion, $cod_funcionalidad);
+        $stmt->execute();
+        $stmt->close();
+    }
+    function eliminarFuncionalidad($cod_funcionalidad)
+    {
+        $stmt = $this->conexion->prepare("DELETE FROM seg_funcionalidad WHERE COD_FUNCIONALIDAD=?");
+        $stmt->bind_param('s',$cod_funcionalidad);
+        $stmt->execute();
+        $stmt->close();
     }
 
     //ROLES
