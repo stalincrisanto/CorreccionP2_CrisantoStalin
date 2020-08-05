@@ -1,8 +1,8 @@
 <?php 
-    include './services/ModuloServicios.php';
-    $modulo = new ModuloServicios();
+    include './services/Servicios.php';
+    $rol = new Servicios();
     
-    $nombre_rol="";
+    //$nombre_rol="";
     $cod_modulo = "";
     $estado="";
     $url_principal="";
@@ -10,15 +10,11 @@
     $descripcion="";
     $accion = "Agregar";
     
-    if(isset($_POST['accionInfraestructura']) && ($_POST['accionInfraestructura']=='Agregar'))
+    if(isset($_POST['accionRol']) && ($_POST['accionRol']=='Agregar'))
     {
-        $modulo->insertarFuncionalidad($_POST['url_principal'],$_POST['nombre'],
-                                       $_POST['descripcion'],$_POST['nombre_rol']);
+        $rol->insertarModuloPorRol($_POST['rol'],$_POST['modulo']);
     }
-    else if(isset($_POST["rol"]))
-    {
-        $nombre_rol=$_POST["rol"];
-    }
+    
     else if(isset($_POST["accionInfraestructura"]) && ($_POST["accionInfraestructura"]=="Modificar"))
     {
         $modulo->modificarModulo($_POST['cod_modulo'],$_POST['nombre'],$_POST['estado'],$_POST['cod_modulo_comparar']);
@@ -58,25 +54,36 @@
     </header><br><br>
     
     <!--INICIO TABLA-->
-    <form action="Rol.php" name="forma" method="post" id="forma">
+    
     <div class="container">
         <div class="row">
             <div class="col">
                 <h3>ROL</h3>
-                <select class="form-control" name="rol">
-                    <option value="" disabled="" selected="">Selecciona un Rol</option>
-                        <?php 
-                            $result2 = $modulo->mostrarRoles();
-                            foreach($result2 as $opciones):
-                        ?>
-                    <option value="<?php echo $opciones['COD_ROL'] ?>"><?php echo $opciones['COD_ROL'] ?></option>
-                    <?php endforeach ?>
-                </select>
-                <input type="submit" value="Aceptar" class="btn btn-primary">
-            </div><br><br><br><br>
-            <div class="col-lg-12">
+                <form action="" method="get">
+                    <select class="form-control" name="rol" id="selectrol">
+                        <option value="" disabled="" selected="">Selecciona un Rol</option>
+                            <?php 
+                                $result2 = $rol->mostrarRoles();
+                                foreach($result2 as $opciones):
+                            ?>
+                        <option value="<?php echo $opciones['COD_ROL'] ?>"><?php echo $opciones['NOMBRE'] ?></option>
+                            <?php endforeach ?>
+                    </select><br>
+                    <input type="submit" name="cod_rol" value="Aceptar" class="btn btn-primary">
+                </form>
+                <script type="text/javascript">
+                        document.getElementById('selectrol').value = "<?php echo $_GET["rol"] ?>";
+                </script>
+                
+                <?php
+                    $nombre_rol=$_GET["rol"];
+                ?>
+            </div><br>
+        
+            <div class="col-lg-12"><br>
+            <form action="Rol.php" name="forma" method="post" id="forma">
                 <div class="table-responsive">
-                    <table id="tablaProductos" class="table table-striped table-bordered table-condensed" style="width: 100%;">
+                    <table id="tablaRoles" class="table table-striped table-bordered table-condensed" style="width: 100%;">
                         <thead class="text-center">
                             <tr>
                                 <th>Modulos</th>
@@ -85,16 +92,15 @@
                         </thead>
                         <tbody>
                             <?php
-                                $result = $modulo->mostrarModulosPorRol($nombre_rol);     
+                                $result = $rol->mostrarModulosPorRol($nombre_rol);     
                                 if ($result->num_rows > 0) 
                                 {
                                     while($row = $result->fetch_assoc()) 
                                     { 
                             ?>
-                            <input type="hidden" name="nombre_modulo" value="<?php echo $row ["COD_MODULO"];?>">
+                            <input type="hidden" name="nombre_rol" value="<?php echo $row ["COD_ROL"];?>">
                             <tr>
-                                <td><?php echo $row ["COD_ROL"];?></td>
-                                <td><?php echo $row ["COD_MODULO"];?></td>
+                                <td><?php echo $row ["NOMBRE"];?></td>
                                 <td>
                                     <div class="text-center">
                                         <div class="btn-group">
@@ -132,26 +138,28 @@
         <div>
             <div class="card-body">
                 <!--<form action="index.php" name="forma" method="post" id="forma">-->
-                    <input type="hidden" name="cod_modulo_comparar" value="<?php echo $cod_modulo ?>">
                     <div class="form-group row" id="editar">
-                        <label for="url_principal" id="lblCodigo" class="col-sm-2 col-form-label">URL</label>
+                        <label for="url_principal" id="lblCodigo" class="col-sm-2 col-form-label">Rol</label>
                         <div class="col-sm-4">
-                            <input type="text" name="url_principal" value="<?php echo $url_principal ?>" require class="form-control">
+                            <input type="text" name="rol" value="<?php echo $nombre_rol ?>" require class="form-control">
                         </div>
                     </div>
                     <div class="form-group row" id="editar">
-                        <label for="nombre" id="lblNombre" class="col-sm-2 col-form-label">Nombre</label>
+                        <label for="url_principal" id="lblCodigo" class="col-sm-2 col-form-label">Módulo</label>
                         <div class="col-sm-4">
-                            <input type="text" name="nombre" value="<?php echo $nombre ?>" require class="form-control">
+                            <select class="form-control" name="modulo" id="selectmodulo">
+                                <option value="" disabled="" selected="">Selecciona un Módulo</option>
+                                    <?php 
+                                        $result3 = $rol->mostrarModulos();
+                                        foreach($result3 as $opciones):
+                                    ?>
+                                <option value="<?php echo $opciones['COD_MODULO'] ?>"><?php echo $opciones['NOMBRE'] ?></option>
+                                    <?php endforeach ?>
+                            </select>    
                         </div>
+                        
                     </div>
-                    <div class="form-group row" id="editar">
-                        <label for="descripcion" id="lbldescripcion" class="col-sm-2 col-form-label">descripcion</label>
-                        <div class="col-sm-4">
-                            <input type="text" name="descripcion" value="<?php echo $descripcion ?>" require class="form-control">
-                        </div>
-                    </div>
-                    <input type="submit" name="accionInfraestructura" value="<?php echo $accion ?>" class="btn btn-primary">
+                    <input type="submit" name="accionRol" value="<?php echo $accion ?>" class="btn btn-primary">
                 </form>
             </div>
         </div>

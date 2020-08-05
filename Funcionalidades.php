@@ -7,11 +7,12 @@
     $nombre="";
     $descripcion="";
     $accion = "Agregar";
+    $mensaje="Añadir Nueva Funcionalidad";
     
     if(isset($_POST['accionInfraestructura']) && ($_POST['accionInfraestructura']=='Agregar'))
     {
         $funcionalidad->insertarFuncionalidad($_POST['url_principal'],$_POST['nombre'],
-                                       $_POST['descripcion'],$_POST['cod_modulo']);
+                                       $_POST['descripcion'],$_POST['cod_modulo_ingresar']);
     }
     else if(isset($_POST["accionInfraestructura"]) && ($_POST["accionInfraestructura"]=="Modificar"))
     {
@@ -26,6 +27,7 @@
             $nombre = $result['NOMBRE'];
             $descripcion = $result['DESCRIPCION'];
             $accion="Modificar";
+            $mensaje="Modificar datos de la funcionalidad";
         }
     }
     else if(isset($_GET['delete']))
@@ -48,14 +50,14 @@
 </head>
 <body>
     <header style="background-color: #673AB7;">
-        <h2 class="text-center text-light">INFRAESTRUCTURA</h2><br>
+        <h2 class="text-center text-light">FUNCIONALIDADES</h2><br>
     </header><br><br>
     
     <!--INICIO TABLA-->
     <div class="container">
         <div class="row">
             <div class="col">
-                <h3>INFRAESTRUCTURA</h3>
+                <h3>Funcionalidades</h3>
                 <form action="" method="get">
                     <select class="form-control" name="modulo" id="selectmodulo">
                         <option value="" disabled="" selected="">Selecciona un Módulo</option>
@@ -75,7 +77,7 @@
                 <?php
                     $nombre_modulo=$_GET["modulo"];
                 ?>
-            <form action="Funcionalidades.php" name="forma" method="post" id="forma">
+            <form action="Funcionalidades.php" name="forma" method="post">
                 <input type="hidden" name="nombre_modulo" value="<?php echo $nombre_modulo ?>">
             </div><br><br><br>
             <div class="col-lg-12">
@@ -134,13 +136,13 @@
     <div class="container">
         <div class="card">
             <div class="card-body"  style="background-color: #673AB7;">
-            <h2 class="text-center text-light">Añadir Nuevo Modulo</h2>
+            <h2 class="text-center text-light"><?php echo $mensaje ?></h2>
             </div>
         </div>
         <div>
             <div class="card-body">
                 <!--<form action="index.php" name="forma" method="post" id="forma">-->
-                    <input type="hidden" name="cod_modulo_comparar" value="<?php echo $cod_modulo ?>">
+                    <input type="hidden" name="cod_modulo_ingresar" value="<?php echo $nombre_modulo ?>">
                     <div class="form-group row" id="editar">
                         <label for="url_principal" id="lblCodigo" class="col-sm-2 col-form-label">URL</label>
                         <div class="col-sm-4">

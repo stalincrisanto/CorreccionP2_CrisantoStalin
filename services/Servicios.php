@@ -93,7 +93,19 @@ class Servicios extends MainService
     }
     function mostrarModulosPorRol($cod_rol)
     {
-        return $this->conexion->query("SELECT * FROM rol_modulo WHERE COD_ROL='".$cod_rol."'");
+        return $this->conexion->query("SELECT seg_modulo.NOMBRE, seg_modulo.COD_MODULO
+        FROM seg_modulo 
+        INNER JOIN rol_modulo 
+        ON seg_modulo.COD_MODULO = rol_modulo.COD_MODULO
+        WHERE rol_modulo.COD_ROL = '".$cod_rol."'");
+    }
+    function insertarModuloPorRol($cod_rol,$cod_modulo)
+    {
+        $stmt = $this->conexion->prepare("INSERT INTO rol_modulo(COD_ROL,COD_MODULO) 
+                                          VALUES (?,?)");
+        $stmt->bind_param('ss',$cod_rol,$cod_modulo);
+        $stmt->execute();
+        $stmt->close();
     }
 
 }
