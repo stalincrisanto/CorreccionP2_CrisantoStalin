@@ -1,6 +1,7 @@
 <?php 
     include './services/Servicios.php';
     $funcionalidad = new Servicios();
+    error_reporting(0);
     $cod_modulo = "";
     $estado="";
     $url_principal="";
@@ -77,7 +78,7 @@
                 <?php
                     $nombre_modulo=$_GET["modulo"];
                 ?>
-            <form action="Funcionalidades.php" name="forma" method="post">
+            <form action="" name="forma" method="post">
                 <input type="hidden" name="nombre_modulo" value="<?php echo $nombre_modulo ?>">
             </div><br><br><br>
             <div class="col-lg-12">

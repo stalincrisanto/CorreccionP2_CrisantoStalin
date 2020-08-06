@@ -1,7 +1,7 @@
 <?php 
     include './services/Servicios.php';
     $rol = new Servicios();
-    
+    error_reporting(0);
     //$nombre_rol="";
     $cod_modulo = "";
     $estado="";
@@ -32,7 +32,7 @@
     }
     else if(isset($_GET['delete']))
     {
-        $modulo->eliminarLogicoModulo($_GET['delete']);
+        $rol->eliminarModuloPorRol($_GET['delete'],$_GET['modulo']);
     }
 ?>
 
@@ -81,7 +81,7 @@
             </div><br>
         
             <div class="col-lg-12"><br>
-            <form action="Rol.php" name="forma" method="post" id="forma">
+            <form action="" name="forma" method="post" id="forma">
                 <div class="table-responsive">
                     <table id="tablaRoles" class="table table-striped table-bordered table-condensed" style="width: 100%;">
                         <thead class="text-center">
@@ -104,8 +104,7 @@
                                 <td>
                                     <div class="text-center">
                                         <div class="btn-group">
-                                            <a href="Funcionalidades.php?update=<?php echo $row ["COD_FUNCIONALIDAD"];?>#editar" type="button" class="btn btn-primary">Editar</a>
-                                            <a href="Funcionalidades.php?delete=<?php echo $row ["COD_FUNCIONALIDAD"];?>" type="button" class="btn btn-danger">Eliminar</a>   
+                                            <a href="Rol.php?delete=<?php echo $row ['COD_ROL'];?>&modulo=<?php echo $row['COD_MODULO'] ?>" type="button" class="btn btn-danger">Eliminar</a>   
                                         </div>
                                     </div>
                                 </td>

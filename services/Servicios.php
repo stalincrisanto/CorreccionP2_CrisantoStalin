@@ -93,7 +93,7 @@ class Servicios extends MainService
     }
     function mostrarModulosPorRol($cod_rol)
     {
-        return $this->conexion->query("SELECT seg_modulo.NOMBRE, seg_modulo.COD_MODULO
+        return $this->conexion->query("SELECT seg_modulo.NOMBRE, seg_modulo.COD_MODULO, rol_modulo.COD_ROL
         FROM seg_modulo 
         INNER JOIN rol_modulo 
         ON seg_modulo.COD_MODULO = rol_modulo.COD_MODULO
@@ -103,6 +103,13 @@ class Servicios extends MainService
     {
         $stmt = $this->conexion->prepare("INSERT INTO rol_modulo(COD_ROL,COD_MODULO) 
                                           VALUES (?,?)");
+        $stmt->bind_param('ss',$cod_rol,$cod_modulo);
+        $stmt->execute();
+        $stmt->close();
+    }
+    function eliminarModuloPorRol($cod_rol,$cod_modulo)
+    {
+        $stmt = $this->conexion->prepare("DELETE FROM rol_modulo WHERE COD_ROL=? AND COD_MODULO=?");
         $stmt->bind_param('ss',$cod_rol,$cod_modulo);
         $stmt->execute();
         $stmt->close();
